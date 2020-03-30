@@ -1,0 +1,3 @@
+ignore:
+  - "conf.py"
+  - "conftest.py"
