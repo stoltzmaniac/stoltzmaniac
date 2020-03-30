@@ -18,5 +18,9 @@ def pd_dataframe_to_ndarray(df: pd.DataFrame):
 
     """
 
-    check_expected_type(df, pd.DataFrame)
-    return np.array(df)
+    if check_expected_type(df, pd.DataFrame):
+        return np.array(df)
+    else:
+        raise TypeError(
+            f"Expected type does not match pd.DataFrame and is of type: {type(df)}"
+        )
