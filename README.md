@@ -15,4 +15,25 @@ Optimization for efficiency of compute, latency, and memory will not be a priori
 The only external package we will use for modeling will be `numpy`. Others required are simply to get data into `numpy.ndarray` format.
 
 This is my first package, so help out and don't hold back on putting in PR's. Thank you!
- 
+
+----
+
+Run tests  
+`pytest`
+
+Automatically generate docs (write appropriate lines into `index.rst`)
+`make html`
+
+Add packages (example with requests):
+
+For development:
+`poetry add -D requests`
+
+For production:
+`poetry add requests`
+
+Build:
+`poetry build`
+
+Publish:
+`poetry publish`
