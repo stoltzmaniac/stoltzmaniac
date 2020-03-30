@@ -1,15 +1,18 @@
-Welcome to stoltzmaniac's documentation!
+Welcome to stoltzmaniac documentation!
 ========================================
-
-.. automodule:: stoltzmaniac.utils.check_types
-   :members:
-.. automodule:: stoltzmaniac.utils.convert
-   :members:
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+.. automodule:: stoltzmaniac.utils.check_types
+   :members:
+
+.. automodule:: stoltzmaniac.utils.convert
+   :members:
+
+.. autoclass:: stoltzmaniac.data_handling.base.Base
+   :members:
 
 
 Indices and tables

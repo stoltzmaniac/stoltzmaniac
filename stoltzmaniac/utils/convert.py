@@ -13,6 +13,7 @@ def pd_dataframe_to_ndarray(df: pd.DataFrame):
 
     Returns
     -------
+    Numpy representation of pandas DataFrame
     np.ndarray
 
     """

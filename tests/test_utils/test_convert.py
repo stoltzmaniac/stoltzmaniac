@@ -10,3 +10,10 @@ def test_pd_dataframe_to_ndarray():
     df_to_array = pd_dataframe_to_ndarray(df)
     assert type(df_to_array) == np.ndarray
     assert df.shape == df_to_array.shape
+
+
+def test_pd_dataframe_to_ndarray_exception():
+    # Newly defined DataFrame should match
+    df = {"foo": ["bar", "is", "silly"], "bar": [1, 2, 3]}
+    with pytest.raises(TypeError):
+        pd_dataframe_to_ndarray(df)
