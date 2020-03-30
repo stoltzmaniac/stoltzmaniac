@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "stoltzmaniac"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Scott Stoltzman <info@stoltzmanconsulting.com>"]
 
