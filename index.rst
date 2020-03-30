@@ -11,7 +11,10 @@ Welcome to stoltzmaniac documentation!
 .. automodule:: stoltzmaniac.utils.convert
    :members:
 
-.. autoclass:: stoltzmaniac.data_handling.base.Base
+.. autoclass:: stoltzmaniac.data_handler.base.Base
+   :members:
+
+.. autoclass:: stoltzmaniac.data_handler.converter.Converter
    :members:
 
 
