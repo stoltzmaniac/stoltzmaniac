@@ -3,7 +3,7 @@
 A Python package to solve simple data science problems. 
 
 ![travisci](https://travis-ci.com/stoltzmaniac/stoltzmaniac.svg?branch=master)
-![codecov](https://codecov.io/gh/stoltzmaniac/stoltzmaniac/branch/master/graph/badge.svg)](https://codecov.io/gh/stoltzmaniac/stoltzmaniac)
+![codecov](https://codecov.io/gh/stoltzmaniac/stoltzmaniac/branch/master/graph/badge.svg)
 
 This is a rudimentary library for machine learning with 3 concepts in mind. This library should be:
   - easy-to-use
