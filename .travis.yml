@@ -5,9 +5,10 @@ python:
 
 before_install:
   - pip install poetry
+  - pip install codecov
 
 install:
   - poetry install -v
 
 script:
-  - pytest
+  - pytest --cov=./
