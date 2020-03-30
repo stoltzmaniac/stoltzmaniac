@@ -2,6 +2,8 @@
 
 A Python package to solve simple data science problems. 
 
+![](https://travis-ci.com/stoltzmaniac/stoltzmaniac.svg?branch=master)
+
 This is a rudimentary library for machine learning with 3 concepts in mind. This library should be:
   - easy-to-use
   - easy-to-read
