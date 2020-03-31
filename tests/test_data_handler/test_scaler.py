@@ -27,6 +27,9 @@ def test_scaler_function_none(data_highly_correlated_dataframe):
     comparison = ret == data_highly_correlated_dataframe["array"]
     assert comparison.all()
 
+    with pytest.raises(ValueError):
+        scaler(input_data=np.ndarray([]))
+
 
 def test_scaler_function_min_max(data_highly_correlated_dataframe):
     input_data = data_highly_correlated_dataframe["array"]

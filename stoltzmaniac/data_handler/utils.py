@@ -43,7 +43,8 @@ def scaler(input_data: np.ndarray, scale_type: str = None) -> np.ndarray:
             raise ValueError(
                 f"scale_type {scale_type} not in ['normalize', 'standardize', 'min_max', 'scale']"
             )
-
+    if not input_data.shape:
+        raise ValueError("input_data shape is None")
     array_mean = np.mean(input_data, axis=0)
     array_std = np.std(input_data, axis=0)
     array_max = np.max(input_data, axis=0)
@@ -59,11 +60,7 @@ def scaler(input_data: np.ndarray, scale_type: str = None) -> np.ndarray:
         scaled_data = input_data - array_mean
     else:
         scaled_data = input_data
-
-    if not scaled_data.shape[0]:
-        raise ValueError("scaled_data is None")
-    else:
-        return scaled_data
+    return scaled_data
 
 
 def splitter(input_data: np.ndarray, train_split: float = 0.7, seed: int = 123) -> dict:
