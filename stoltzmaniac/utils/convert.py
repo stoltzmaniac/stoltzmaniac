@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from ..utils.check_types import check_expected_type
+from .check_types import check_expected_type
 
 
 def pd_dataframe_to_ndarray(df: pd.DataFrame):

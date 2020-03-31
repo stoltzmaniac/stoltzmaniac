@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-from stoltzmaniac.data_handler.base import Base
-from stoltzmaniac.utils.convert import check_expected_type, pd_dataframe_to_ndarray
+from .base import Base
+from ..utils.convert import check_expected_type, pd_dataframe_to_ndarray
 
 
 class Converter(Base):
