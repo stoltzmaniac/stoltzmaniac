@@ -1,20 +1,19 @@
 import pytest
 import numpy as np
-import pandas as pd
-from stoltzmaniac.data_handler.converter import Converter
+from stoltzmaniac.data_handler.utils import converter
 
 
-def test_converter_class(data_highly_correlated_dataframe):
+def test_converter_function(data_highly_correlated_dataframe):
+    with pytest.raises(TypeError):
+        converter()
 
     with pytest.raises(TypeError):
-        Converter()
+        converter([1, 2, 3])
 
-    converter_df = Converter(input_data=data_highly_correlated_dataframe["dataframe"])
-    assert converter_df.input_data.all() is not None
-    assert type(converter_df.input_data) == pd.DataFrame
-    assert type(converter_df.data) == np.ndarray
+    data_dataframe = converter(input_data=data_highly_correlated_dataframe["dataframe"])
+    assert type(data_dataframe) == np.ndarray
+    assert data_dataframe.shape == data_highly_correlated_dataframe["dataframe"].shape
 
-    converter_array = Converter(input_data=data_highly_correlated_dataframe["array"])
-    assert converter_df.input_data.all() is not None
-    assert type(converter_array.input_data) == np.ndarray
-    assert type(converter_array.data) == np.ndarray
+    data_array = converter(input_data=data_highly_correlated_dataframe["array"])
+    assert type(data_array) == np.ndarray
+    assert data_array.shape == data_highly_correlated_dataframe["array"].shape
