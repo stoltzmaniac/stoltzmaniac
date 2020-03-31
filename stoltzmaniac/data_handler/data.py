@@ -1,5 +1,5 @@
 import numpy as np
-from .utils import converter, scaler, splitter
+from .utils import converter, scaler, splitter, label_encoder
 
 
 class Data:

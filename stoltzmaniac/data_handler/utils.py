@@ -94,3 +94,34 @@ def splitter(input_data: np.ndarray, train_split: float = 0.7, seed: int = 123) 
     train_idx, test_idx = indices[:split_row], indices[split_row:]
     train_data, test_data = input_data[train_idx, :], input_data[test_idx, :]
     return {"test": test_data, "train": train_data}
+
+
+def label_encoder(input_data: np.ndarray) -> dict:
+    """
+    Encode strings as integers within array and keep track of their original values in a dict
+    Parameters
+    ----------
+    input_data np.ndarray
+
+    Returns
+    -------
+
+    """
+
+    encoded_data = np.column_stack(
+        [
+            np.unique(input_data[:, i], return_inverse=True)[1]
+            for i in range(input_data.shape[1])
+        ]
+    )
+
+    encoded_labels = []
+    for real_column, encoded_column in zip(
+        np.column_stack(input_data), np.column_stack(encoded_data)
+    ):
+        d = {}
+        for real_element, encoded_element in zip(real_column, encoded_column):
+            d[encoded_element] = real_element
+        encoded_labels.append(d)
+
+    return {"encoded_data": encoded_data, "encoded_labels": encoded_labels}
