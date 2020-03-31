@@ -50,30 +50,50 @@
 </dl>
 </dd></dl>
 
-<span class="target" id="module-stoltzmaniac.utils.convert"></span><dl class="function">
-<dt id="stoltzmaniac.utils.convert.pd_dataframe_to_ndarray">
-<code class="sig-prename descclassname">stoltzmaniac.utils.convert.</code><code class="sig-name descname">pd_dataframe_to_ndarray</code><span class="sig-paren">(</span><em class="sig-param">df: pandas.core.frame.DataFrame</em><span class="sig-paren">)</span><a class="headerlink" href="#stoltzmaniac.utils.convert.pd_dataframe_to_ndarray" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a pandas dataframe to a numpy array
-:param df: pd.DataFrame</p>
+<span class="target" id="module-stoltzmaniac.data_handler.utils"></span><dl class="function">
+<dt id="stoltzmaniac.data_handler.utils.converter">
+<code class="sig-prename descclassname">stoltzmaniac.data_handler.utils.</code><code class="sig-name descname">converter</code><span class="sig-paren">(</span><em class="sig-param">input_data</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#stoltzmaniac.data_handler.utils.converter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts data to numpy array
+:param input_data:
+:type input_data: np.ndarray, pd.DataFrame</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><ul class="simple">
-<li><p><em>Numpy representation of pandas DataFrame</em></p></li>
-<li><p><em>np.ndarray</em></p></li>
-</ul>
-</p>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="stoltzmaniac.data_handler.utils.scaler">
+<code class="sig-prename descclassname">stoltzmaniac.data_handler.utils.</code><code class="sig-name descname">scaler</code><span class="sig-paren">(</span><em class="sig-param">input_data: numpy.ndarray</em>, <em class="sig-param">scale_type: str = None</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#stoltzmaniac.data_handler.utils.scaler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data preprocessing step to scale
+:param input_data np.ndarray:
+:param scale_type str in [“normalize”, “standardize”, “min_max”, “scale”]:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stoltzmaniac.data_handler.utils.splitter">
+<code class="sig-prename descclassname">stoltzmaniac.data_handler.utils.</code><code class="sig-name descname">splitter</code><span class="sig-paren">(</span><em class="sig-param">input_data: numpy.ndarray</em>, <em class="sig-param">train_split: float = 0.7</em>, <em class="sig-param">seed: int = 123</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#stoltzmaniac.data_handler.utils.splitter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Separates the data and splits it accordingly, utilizes the random seed
+:param input_data np.ndarray:
+:param train_split float:
+:param seed int:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>{‘test’</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray, ‘train’: np.ndarray}</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="class">
-<dt id="stoltzmaniac.data_handler.base.Base">
-<em class="property">class </em><code class="sig-prename descclassname">stoltzmaniac.data_handler.base.</code><code class="sig-name descname">Base</code><span class="sig-paren">(</span><em class="sig-param">input_data</em><span class="sig-paren">)</span><a class="headerlink" href="#stoltzmaniac.data_handler.base.Base" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="class">
-<dt id="stoltzmaniac.data_handler.converter.Converter">
-<em class="property">class </em><code class="sig-prename descclassname">stoltzmaniac.data_handler.converter.</code><code class="sig-name descname">Converter</code><span class="sig-paren">(</span><em class="sig-param">input_data</em><span class="sig-paren">)</span><a class="headerlink" href="#stoltzmaniac.data_handler.converter.Converter" title="Permalink to this definition">¶</a></dt>
+<dt id="stoltzmaniac.data_handler.data.Data">
+<em class="property">class </em><code class="sig-prename descclassname">stoltzmaniac.data_handler.data.</code><code class="sig-name descname">Data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">train_split=0.7</em>, <em class="sig-param">seed=123</em><span class="sig-paren">)</span><a class="headerlink" href="#stoltzmaniac.data_handler.data.Data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

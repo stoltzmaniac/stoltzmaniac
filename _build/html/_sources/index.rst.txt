@@ -8,13 +8,10 @@ Welcome to stoltzmaniac documentation!
 .. automodule:: stoltzmaniac.utils.check_types
    :members:
 
-.. automodule:: stoltzmaniac.utils.convert
+.. automodule:: stoltzmaniac.data_handler.utils
    :members:
 
-.. autoclass:: stoltzmaniac.data_handler.base.Base
-   :members:
-
-.. autoclass:: stoltzmaniac.data_handler.converter.Converter
+.. autoclass:: stoltzmaniac.data_handler.data.Data
    :members:
 
 

@@ -21,9 +21,6 @@ This is my first package, so help out and don't hold back on putting in PR's. Th
 Run tests  
 `pytest`
 
-Automatically generate docs (write appropriate lines into `index.rst`)
-`make html`
-
 Add packages (example with requests):
 
 For development:
@@ -31,6 +28,16 @@ For development:
 
 For production:
 `poetry add requests`
+
+Changes to version must be made in:
+```shell script
+stoltzmaniac/__init__.py
+tests/test_stoltzmaniac.py
+pyproject.toml
+```
+
+Automatically generate docs (write appropriate lines into `index.rst`)
+`make html`
 
 Build:
 `poetry build`
