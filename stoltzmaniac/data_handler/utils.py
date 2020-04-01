@@ -26,6 +26,23 @@ def converter(input_data) -> np.ndarray:
         raise TypeError("Input object must be pd.DataFrame or np.ndarray")
 
 
+def describer(input_data: np.ndarray) -> dict:
+    """
+    Calculates descriptive statistics
+    Parameters
+    ----------
+    input_data np.ndarray
+
+    Returns
+    -------
+    """
+    array_mean = np.mean(input_data, axis=0)
+    array_std = np.std(input_data, axis=0)
+    array_max = np.max(input_data, axis=0)
+    array_min = np.min(input_data, axis=0)
+    return {"max": array_max, "mean": array_mean, "min": array_min, "std": array_std}
+
+
 def scaler(input_data: np.ndarray, scale_type: str = None) -> np.ndarray:
     """
     Data preprocessing step to scale
@@ -45,10 +62,12 @@ def scaler(input_data: np.ndarray, scale_type: str = None) -> np.ndarray:
             )
     if not input_data.shape:
         raise ValueError("input_data shape is None")
-    array_mean = np.mean(input_data, axis=0)
-    array_std = np.std(input_data, axis=0)
-    array_max = np.max(input_data, axis=0)
-    array_min = np.min(input_data, axis=0)
+
+    descriptive_stats = describer(input_data)
+    array_max = descriptive_stats["max"]
+    array_mean = descriptive_stats["mean"]
+    array_min = descriptive_stats["min"]
+    array_std = descriptive_stats["std"]
 
     if scale_type == "min_max":
         scaled_data = (input_data - array_min) / (array_max - array_mean)
@@ -108,20 +127,60 @@ def label_encoder(input_data: np.ndarray) -> dict:
 
     """
 
-    encoded_data = np.column_stack(
-        [
-            np.unique(input_data[:, i], return_inverse=True)[1]
-            for i in range(input_data.shape[1])
-        ]
-    )
+    def convert_numeric(data: np.ndarray):
+        """
+        Check types of data and convert (in case numeric data is stored as strings)
+        Parameters
+        ----------
+        data
+
+        Returns
+        -------
+        data, is_numeric
+        """
+        data = data.astype(str)  # in order to avoid float being rounded as int
+        try:
+            data = data.astype(int)
+            return data, True
+        except Exception:
+            pass
+        try:
+            data = data.astype(float)
+            return data, True
+        except Exception:
+            pass
+        return np.unique(data, return_inverse=True)[1], False
+
+    my_data_list = []
+    my_numeric_list = []
+
+    if input_data.ndim == 1:
+        n = 1
+    else:
+        n = input_data.ndim + 1
+
+    for i in range(n):
+        if n == 1:
+            d = input_data
+        else:
+            d = input_data[:, i]
+        ret_d, is_numeric = convert_numeric(d)
+        my_data_list.append(ret_d)
+        my_numeric_list.append(is_numeric)
+
+    encoded_data = np.column_stack(my_data_list)
 
     encoded_labels = []
-    for real_column, encoded_column in zip(
+    i = 0
+    for orignal_column, encoded_column in zip(
         np.column_stack(input_data), np.column_stack(encoded_data)
     ):
         d = {}
-        for real_element, encoded_element in zip(real_column, encoded_column):
-            d[encoded_element] = real_element
+        if not my_numeric_list[i]:
+            for real_element, encoded_element in zip(orignal_column, encoded_column):
+                if not np.char.isnumeric(real_element):
+                    d[int(encoded_element)] = real_element
         encoded_labels.append(d)
+        i += 1
 
     return {"encoded_data": encoded_data, "encoded_labels": encoded_labels}

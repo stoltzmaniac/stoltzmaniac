@@ -14,8 +14,8 @@ def test_data_class_basics(data_highly_correlated_dataframe):
 
     data_class_from_array = Data(data=data_highly_correlated_dataframe["array"])
     assert type(data_class_from_array.data) == np.ndarray
-    assert data_class_from_array.data_test == np.ndarray
-    assert data_class_from_array.data_train == np.ndarray
+    assert type(data_class_from_array.data_test) == np.ndarray
+    assert type(data_class_from_array.data_train) == np.ndarray
     assert data_class_from_array.train_split == 0.7
     assert data_class_from_array.seed == 123
 
