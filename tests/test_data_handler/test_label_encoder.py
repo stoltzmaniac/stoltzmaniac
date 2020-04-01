@@ -9,7 +9,7 @@ def test_label_encoder_function_basics():
         label_encoder()
 
 
-def test_label_encoder_function_consistent_data_types_mixed():
+def test_label_encoder_function_consistent_data_types_mixed_ordered():
     input_data = np.array(
         [
             ["hi", "there", 4.3],
@@ -31,9 +31,33 @@ def test_label_encoder_function_consistent_data_types_mixed():
     ]
 
 
+def test_label_encoder_function_consistent_data_types_mixed_unordered():
+    input_data = np.array(
+        [
+            ["oh", "hi", 4.3, "there"],
+            ["me", "scott", 3.1, "james"],
+            ["oh", "hi", 0.1, "scott"],
+            ["my", "please", 10.2, "there"],
+        ]
+    )
+
+    ret = label_encoder(input_data)
+
+    comp1 = ret["encoded_data"] == np.array(
+        [[2, 0.0, 4.3, 2], [0, 2.0, 3.1, 0], [2, 0.0, 0.1, 1], [1, 1.0, 10.2, 2]]
+    )
+    assert comp1.all()
+    assert ret["encoded_labels"] == [
+        {2: "oh", 0: "me", 1: "my"},
+        {0: "hi", 2: "scott", 1: "please"},
+        {},
+        {2: "there", 0: "james", 1: "scott"},
+    ]
+
+
 def test_label_encoder_function_consistent_data_types_string():
     # Single
-    input_data = np.array(["hi", "there", "scott", "hi"])
+    input_data = np.array([["hi"], ["there"], ["scott"], ["hi"]])
     ret = label_encoder(input_data)
 
     comp1 = ret["encoded_data"] == np.array([[0], [2], [1], [0]])
@@ -45,25 +69,27 @@ def test_label_encoder_function_consistent_data_types_string():
         [["hi", "there", "scott", "hi"], ["please", "there", "yes", "no"]]
     )
     ret = label_encoder(input_data)
-    comp1 = ret["encoded_data"] == np.array([[0, 0, 0], [1, 0, 1]])
+    print(ret)
+    comp1 = ret["encoded_data"] == np.array([[0, 0, 0, 0], [1, 0, 1, 1]])
     assert comp1.all()
     assert ret["encoded_labels"] == [
         {0: "hi", 1: "please"},
         {0: "there"},
         {0: "scott", 1: "yes"},
+        {0: "hi", 1: "no"},
     ]
 
 
 def test_label_encoder_function_consistent_data_types_numeric():
     # Integer
-    input_data = np.array([1, 10, 3])
+    input_data = np.array([[1], [10], [3]])
     ret = label_encoder(input_data)
     comp1 = ret["encoded_data"] == np.array([[1], [10], [3]])
     assert comp1.all()
     assert ret["encoded_labels"] == [{}]
 
     # Float
-    input_data = np.array([1.1, 10.4, 3.4])
+    input_data = np.array([[1.1], [10.4], [3.4]])
     ret = label_encoder(input_data)
     comp1 = ret["encoded_data"] == np.array([[1.1], [10.4], [3.4]])
     assert comp1.all()

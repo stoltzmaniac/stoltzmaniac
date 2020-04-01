@@ -35,3 +35,44 @@ def test_data_from_array_methods_scale(data_highly_correlated_dataframe):
     calcs = data_class_from_array.data - np.mean(data_class_from_array.data, axis=0)
     comparison = ret == calcs
     assert comparison.all()
+
+
+def test_data_from_array_methods_label_encode():
+    input_data = np.array(
+        [
+            ["oh", "hi", 4.3, "there"],
+            ["me", "scott", 3.1, "james"],
+            ["oh", "hi", 0.1, "scott"],
+            ["my", "please", 10.2, "there"],
+        ]
+    )
+    d = Data(input_data)
+    d.label_encode()
+
+    comp1 = d.data_encoded == np.array(
+        [[2, 0, 4.3, 2], [0, 2, 3.1, 0], [2, 0, 0.1, 1], [1, 1, 10.2, 2]]
+    )
+    assert comp1.all()
+    assert d.data_labels == [
+        {2: "oh", 0: "me", 1: "my"},
+        {0: "hi", 2: "scott", 1: "please"},
+        {},
+        {2: "there", 0: "james", 1: "scott"},
+    ]
+
+
+def test_data_from_array_methods_label_decode():
+    input_data = np.array(
+        [
+            ["oh", "hi", 4.3, "there"],
+            ["me", "scott", 3.1, "james"],
+            ["oh", "hi", 0.1, "scott"],
+            ["my", "please", 10.2, "there"],
+        ]
+    )
+    d = Data(input_data)
+    d.label_encode()
+    d.label_decode()
+
+    comp1 = input_data == d.data_decoded
+    assert comp1.all()

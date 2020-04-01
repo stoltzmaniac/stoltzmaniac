@@ -17,3 +17,6 @@ def test_converter_function(data_highly_correlated_dataframe):
     data_array = converter(input_data=data_highly_correlated_dataframe["array"])
     assert type(data_array) == np.ndarray
     assert data_array.shape == data_highly_correlated_dataframe["array"].shape
+
+    data_array = converter(input_data=np.array(["hi", "there", "yo"]))
+    assert data_array.ndim > 1

@@ -1,5 +1,5 @@
 import numpy as np
-from .utils import converter, describer, scaler, splitter, label_encoder
+from .utils import converter, describer, scaler, splitter, label_encoder, label_decoder
 
 
 class Data:
@@ -26,6 +26,14 @@ class Data:
         self.seed = seed
         self.scale_type = scale_type
         self.target_column = target_column  # defines response / target variable
+
+    def label_encode(self):
+        ret = label_encoder(self.data)
+        self.data_encoded = ret["encoded_data"]
+        self.data_labels = ret["encoded_labels"]
+
+    def label_decode(self):
+        self.data_decoded = label_decoder(self.data_encoded, self.data_labels)
 
     def split(self):
         """

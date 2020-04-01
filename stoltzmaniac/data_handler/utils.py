@@ -19,11 +19,16 @@ def converter(input_data) -> np.ndarray:
     """
     # Check data type and convert to numpy array if required
     if check_expected_type(input_data, np.ndarray):
-        return input_data
+        ret = input_data
     elif check_expected_type(input_data, pd.DataFrame):
-        return pd_dataframe_to_ndarray(input_data)
+        ret = pd_dataframe_to_ndarray(input_data)
     else:
         raise TypeError("Input object must be pd.DataFrame or np.ndarray")
+
+    # Array must have shape (x, 1) and not (x,) -- necessary for indexing and operations
+    if input_data.ndim == 1:
+        ret = np.array([[i] for i in input_data])
+    return ret
 
 
 def describer(input_data: np.ndarray) -> dict:
@@ -142,33 +147,33 @@ def label_encoder(input_data: np.ndarray) -> dict:
         try:
             data = data.astype(int)
             return data, True
-        except Exception:
+        except Exception as e:
+            # print(e)
             pass
         try:
             data = data.astype(float)
             return data, True
-        except Exception:
+        except Exception as e:
+            # print(e)
             pass
         return np.unique(data, return_inverse=True)[1], False
 
     my_data_list = []
     my_numeric_list = []
 
-    if input_data.ndim == 1:
-        n = 1
-    else:
-        n = input_data.ndim + 1
-
-    for i in range(n):
-        if n == 1:
-            d = input_data
-        else:
-            d = input_data[:, i]
+    for i in range(input_data.shape[1]):
+        d = input_data[:, i]
         ret_d, is_numeric = convert_numeric(d)
         my_data_list.append(ret_d)
         my_numeric_list.append(is_numeric)
+        encoded_data = np.column_stack(my_data_list)
 
-    encoded_data = np.column_stack(my_data_list)
+    if "encoded_data" in locals():
+        pass
+    else:
+        raise ValueError(
+            "encoded_data does not exist in convert_numeric function of label_encoder"
+        )
 
     encoded_labels = []
     i = 0
@@ -201,7 +206,6 @@ def label_decoder(data: np.ndarray, lookup: list):
     for i in range(data.shape[1]):
         if lookup[i]:
             d = np.vectorize(lookup[i].get)(data[:, i])
-            print(d)
         else:
             d = data[:, i]
         decoder_list.append(d)
