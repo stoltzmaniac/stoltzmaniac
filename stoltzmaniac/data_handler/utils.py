@@ -184,3 +184,26 @@ def label_encoder(input_data: np.ndarray) -> dict:
         i += 1
 
     return {"encoded_data": encoded_data, "encoded_labels": encoded_labels}
+
+
+def label_decoder(data: np.ndarray, lookup: list):
+    """
+    Maps encoded labels back
+    Parameters
+    ----------
+    data
+    lookup
+
+    Returns
+    -------
+    """
+    decoder_list = []
+    for i in range(data.shape[1]):
+        if lookup[i]:
+            d = np.vectorize(lookup[i].get)(data[:, i])
+            print(d)
+        else:
+            d = data[:, i]
+        decoder_list.append(d)
+    ret = np.column_stack(decoder_list)
+    return ret
