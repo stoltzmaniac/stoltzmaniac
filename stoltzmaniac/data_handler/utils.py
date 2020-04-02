@@ -1,3 +1,4 @@
+import logging
 import numpy as np
 import pandas as pd
 
@@ -42,9 +43,15 @@ def describer(input_data: np.ndarray) -> dict:
     -------
     """
     array_mean = np.mean(input_data, axis=0)
-    array_std = np.std(input_data, axis=0)
     array_max = np.max(input_data, axis=0)
     array_min = np.min(input_data, axis=0)
+
+    try:
+        array_std = np.std(input_data, axis=0)
+    except TypeError as e:
+        logging.warning("array_std not possible due to sqrt")
+        array_std = None
+
     return {"max": array_max, "mean": array_mean, "min": array_min, "std": array_std}
 
 
@@ -60,6 +67,7 @@ def scaler(input_data: np.ndarray, scale_type: str = None) -> np.ndarray:
     -------
 
     """
+    # TODO: handle for 0 in data (divide by 0)
     if scale_type not in ["normalize", "standardize", "min_max", "scale"]:
         if scale_type:
             raise ValueError(
@@ -69,10 +77,10 @@ def scaler(input_data: np.ndarray, scale_type: str = None) -> np.ndarray:
         raise ValueError("input_data shape is None")
 
     descriptive_stats = describer(input_data)
-    array_max = descriptive_stats["max"]
-    array_mean = descriptive_stats["mean"]
-    array_min = descriptive_stats["min"]
-    array_std = descriptive_stats["std"]
+    array_max = descriptive_stats.get("max")
+    array_mean = descriptive_stats.get("mean")
+    array_min = descriptive_stats.get("min")
+    array_std = descriptive_stats.get("std")
 
     if scale_type == "min_max":
         scaled_data = (input_data - array_min) / (array_max - array_mean)

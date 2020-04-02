@@ -19,21 +19,21 @@ class Data:
         data formats to be added, currently np.ndarray or pd.DataFrame
         """
         # Convert pd.DataFrame (currently only setup), will pass np.ndarray
-        self.data = converter(data)
-        self.data_train = np.array([])
-        self.data_test = np.array([])
-        self.train_split = train_split
         self.seed = seed
+        self.train_split = train_split
         self.scale_type = scale_type
-        self.target_column = target_column  # defines response / target variable
+        self.target_column = target_column
+        self.data = converter(data)
+        self.label_encode()
+        self.split()
+        self.data_train = self.scale(
+            self.data_train, self.data_labels, self.target_column, self.scale_type
+        )
 
     def label_encode(self):
         ret = label_encoder(self.data)
         self.data_encoded = ret["encoded_data"]
         self.data_labels = ret["encoded_labels"]
-
-    def label_decode(self):
-        self.data_decoded = label_decoder(self.data_encoded, self.data_labels)
 
     def split(self):
         """
@@ -46,8 +46,50 @@ class Data:
         self.data_test = split_data["test"]
 
     @staticmethod
-    def scale(input_data: np.ndarray, scale_type: str = "normalize"):
-        return scaler(input_data=input_data, scale_type=scale_type)
+    def label_decode(data_encoded, data_labels):
+        data_decoded = label_decoder(data_encoded, data_labels)
+        return data_decoded
+
+    @staticmethod
+    def scale(
+        input_data: np.ndarray, data_labels: list, target_column: int, scale_type: str
+    ):
+
+        # List of categorical vs numerical labels, without target_column
+        input_predictor_labels = data_labels.copy()
+        input_predictor_labels.pop(target_column)
+
+        input_predictor_categorical_columns = [
+            i for i, val in enumerate(input_predictor_labels) if val
+        ]
+        input_predictor_numerical_columns = [
+            i for i, val in enumerate(input_predictor_labels) if not val
+        ]
+
+        # Remove target_column from input_data to match categorical_columns
+        input_target = input_data[:, target_column]
+
+        # Delete target column for scaling
+        input_predictors_prep = np.delete(input_data, target_column, axis=1)
+
+        # Delete categorical columns for scaling
+        input_predictors = np.delete(
+            input_predictors_prep, input_predictor_categorical_columns, axis=1
+        )
+
+        if target_column:
+            predictors = scaler(input_data=input_predictors, scale_type=scale_type)
+        else:
+            predictors = input_predictors
+
+        # Replace data with scaled data
+        input_predictors_prep[:, input_predictor_numerical_columns] = predictors
+
+        # Insert target data back in
+        scaled_combined = np.insert(
+            input_predictors_prep, target_column, input_target[np.newaxis], axis=1
+        )
+        return scaled_combined
 
     # def _scale_train(self):
     #     """
