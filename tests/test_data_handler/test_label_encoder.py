@@ -94,3 +94,16 @@ def test_label_encoder_function_consistent_data_types_numeric():
     comp1 = ret["encoded_data"] == np.array([[1.1], [10.4], [3.4]])
     assert comp1.all()
     assert ret["encoded_labels"] == [{}]
+
+
+def test_label_encoder_function_multiple_type_single_dimension():
+    # Integer
+    input_data = np.array([["oh"], ["hi"], [4.3], ["there"], ["me"], ["me"], [6.4]])
+    ret = label_encoder(input_data)
+    print(ret)
+
+    comp1 = ret["encoded_data"] == np.array([[4], [2], [0], [5], [3], [3], [1]])
+    assert comp1.all()
+    assert ret["encoded_labels"] == [
+        {4: "oh", 2: "hi", 0: "4.3", 5: "there", 3: "me", 1: "6.4"}
+    ]

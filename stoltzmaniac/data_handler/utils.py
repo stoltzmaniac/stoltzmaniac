@@ -3,7 +3,10 @@ import numpy as np
 import pandas as pd
 
 from stoltzmaniac.utils.check_types import check_expected_type
-from stoltzmaniac.utils.convert import pd_dataframe_to_ndarray
+from stoltzmaniac.utils.convert import (
+    pd_dataframe_to_ndarray,
+    convert_column_to_numeric,
+)
 
 
 def converter(input_data) -> np.ndarray:
@@ -28,7 +31,7 @@ def converter(input_data) -> np.ndarray:
 
     # Array must have shape (x, 1) and not (x,) -- necessary for indexing and operations
     if input_data.ndim == 1:
-        ret = np.array([[i] for i in input_data])
+        ret = input_data[np.newaxis]
     return ret
 
 
@@ -121,9 +124,17 @@ def splitter(input_data: np.ndarray, train_split: float = 0.7, seed: int = 123) 
         )
 
     np.random.seed(seed=seed)
-    indices = np.random.permutation(input_data.shape[0])
     split_row = round(input_data.shape[0] * train_split)
+    indices = np.random.permutation(input_data.shape[0])
     train_idx, test_idx = indices[:split_row], indices[split_row:]
+
+    if len(train_idx) < 1 or len(test_idx) < 1:
+        raise ValueError(
+            f"Train / Test break does not result in more than one row in test / train\n"
+            f"len(train_idx) = {len(train_idx)}\n"
+            f"len(test_idx) = {len(test_idx)}"
+        )
+
     train_data, test_data = input_data[train_idx, :], input_data[test_idx, :]
     return {"test": test_data, "train": train_data}
 
@@ -140,38 +151,12 @@ def label_encoder(input_data: np.ndarray) -> dict:
 
     """
 
-    def convert_numeric(data: np.ndarray):
-        """
-        Check types of data and convert (in case numeric data is stored as strings)
-        Parameters
-        ----------
-        data
-
-        Returns
-        -------
-        data, is_numeric
-        """
-        data = data.astype(str)  # in order to avoid float being rounded as int
-        try:
-            data = data.astype(int)
-            return data, True
-        except Exception as e:
-            # print(e)
-            pass
-        try:
-            data = data.astype(float)
-            return data, True
-        except Exception as e:
-            # print(e)
-            pass
-        return np.unique(data, return_inverse=True)[1], False
-
     my_data_list = []
     my_numeric_list = []
 
     for i in range(input_data.shape[1]):
         d = input_data[:, i]
-        ret_d, is_numeric = convert_numeric(d)
+        ret_d, is_numeric = convert_column_to_numeric(d)
         my_data_list.append(ret_d)
         my_numeric_list.append(is_numeric)
         encoded_data = np.column_stack(my_data_list)

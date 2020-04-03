@@ -23,12 +23,21 @@ class Data:
         self.train_split = train_split
         self.scale_type = scale_type
         self.target_column = target_column
+        self.data_encoded = np.array([])
+        self.data_labels = []
+        self.data_train = np.array([])
+        self.data_test = np.array([])
         self.data = converter(data)
+        if len(self.data) < 2:
+            raise ValueError(
+                f"input_data has less than 2 rows which cannot be split between test_train"
+            )
+
         self.label_encode()
         self.split()
-        self.data_train = self.scale(
-            self.data_train, self.data_labels, self.target_column, self.scale_type
-        )
+        # self.data_train = self.scale(
+        #     self.data_train, self.data_labels, self.target_column, self.scale_type
+        # )
 
     def label_encode(self):
         ret = label_encoder(self.data)
@@ -40,7 +49,7 @@ class Data:
         Create test / train data sets based off of train_split and seed
         """
         split_data = splitter(
-            input_data=self.data, train_split=self.train_split, seed=self.seed
+            input_data=self.data_encoded, train_split=self.train_split, seed=self.seed
         )
         self.data_train = split_data["train"]
         self.data_test = split_data["test"]
