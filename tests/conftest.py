@@ -1,31 +1,16 @@
 import pytest
-import pandas as pd
 import numpy as np
 
 
 @pytest.fixture
-def data_highly_correlated_dataframe() -> dict:
-    """
-    Setup test data for
-    :return:
-    """
-    df = pd.read_csv("tests/data/highly_correlated.csv")
-    yield {
-        "dataframe": df,
-        "array": np.array(df),
-    }
-    return print("data_highly_correlated_dataframe fixture finished.")
+def DATA_ARRAY_3D() -> np.ndarray:
+    my_array = np.array([[1, 12, 2], [2, 3, 4], [3, 9, 6], [4, 1, 8]], dtype=np.float)
+    yield my_array
+    return print("DATA_ARRAY_3D fixture finished.")
 
 
 @pytest.fixture
-def data_loosely_correlated_dataframe() -> dict:
-    """
-    Setup test data for
-    :return:
-    """
-    df = pd.read_csv("tests/data/loosely_correlated.csv")
-    yield {
-        "dataframe": df,
-        "array": np.array(df),
-    }
-    return print("data_loosely_correlated_dataframe fixture finished.")
+def DATA_ARRAY_2D() -> np.ndarray:
+    my_array = np.array([[1, 2], [2, 4], [3, 6], [4, 8]], dtype=np.float)
+    yield my_array
+    return print("DATA_ARRAY_2D fixture finished.")
