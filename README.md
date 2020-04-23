@@ -16,6 +16,23 @@ The only external package we will use for modeling will be `numpy`. Others requi
 
 This is my first package, so help out and don't hold back on putting in PR's. Thank you!
 
+Installing:
+```bash
+pip install stoltzmaniac
+```
+
+Example of Linear Regression:
+```python
+import numpy as np
+from stoltzmaniac.models.supervised.linear_regression import LinearRegression
+
+my_array = np.array([[1, 12, 2], [2, 3, 4], [3, 9, 6], [4, 1, 8]], dtype=np.float)
+model = LinearRegression(my_array, train_split=0.7, scale_type="normalize")
+
+model.predict(np.array([[10, 12], [50, 4]]))
+# >> array([ 20., 100.])
+```
+
 ----
 
 Run tests  
