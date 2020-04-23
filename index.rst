@@ -11,7 +11,7 @@ Welcome to stoltzmaniac documentation!
 .. automodule:: stoltzmaniac.data_handler.utils
    :members:
 
-.. autoclass:: stoltzmaniac.data_handler.data.Data
+.. autoclass:: stoltzmaniac.data_handler.data.BaseData
    :members:
 
 
