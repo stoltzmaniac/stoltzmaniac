@@ -18,11 +18,10 @@ class ScaleData:
         self.x_data = self.raw_data[:, :-1]
         self.y_data = self.raw_data[:, -1]
 
-        if not isinstance(self.scale_type, str):
-            if self.scale_type is not None:
-                raise TypeError(
-                    f"scale_type must be None or of type str, it is: {type(scale_type)}"
-                )
+        if not isinstance(self.scale_type, str) and self.scale_type is not None:
+            raise TypeError(
+                f"scale_type must be None or of type str, it is: {type(scale_type)}"
+            )
 
         # Set statistics to be used in preprocessing - needed during preprocessing for predictions
         self.x_array_mean = np.mean(self.x_data, axis=0)
@@ -54,11 +53,13 @@ class ScaleData:
         np.ndarray of scaled data or returns x_data if self.scale_type is None
         """
         # Ensure that scale type is handled by function
-        if self.scale_type not in ["normalize", "standardize", "min_max", "scale"]:
-            if self.scale_type:
-                raise ValueError(
-                    f"scale_type {self.scale_type} not in ['normalize', 'standardize', 'min_max', 'scale']"
-                )
+        if (
+            self.scale_type not in ["normalize", "standardize", "min_max", "scale"]
+            and self.scale_type
+        ):
+            raise ValueError(
+                f"scale_type {self.scale_type} not in ['normalize', 'standardize', 'min_max', 'scale']"
+            )
         if x_data.shape is None:
             raise ValueError("x_data shape is None")
 
@@ -71,10 +72,10 @@ class ScaleData:
             scaled_data = (x_data - self.x_array_mean) / (
                 self.x_array_max - self.x_array_min
             )
-        elif self.scale_type == "standardize":
-            scaled_data = (x_data - self.x_array_mean) / self.x_array_std
         elif self.scale_type == "scale":
             scaled_data = x_data - self.x_array_mean
+        elif self.scale_type == "standardize":
+            scaled_data = (x_data - self.x_array_mean) / self.x_array_std
         else:
             scaled_data = x_data
         return scaled_data
