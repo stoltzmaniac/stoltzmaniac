@@ -44,3 +44,7 @@ def test_scale_data_results(DATA_ARRAY_2D):
             np.array([[-1.34164079], [-0.4472136], [0.4472136], [1.34164079]]), 2
         )
     ).all()
+
+    with pytest.raises(ValueError):
+        tmp = ScaleData(DATA_ARRAY_2D, scale_type="not_in_my_list")
+        tmp.scale(DATA_ARRAY_2D)

@@ -27,18 +27,7 @@ class ScaleData:
         self.x_array_mean = np.mean(self.x_data, axis=0)
         self.x_array_max = np.max(self.x_data, axis=0)
         self.x_array_min = np.min(self.x_data, axis=0)
-
-        # A standard deviation may not have a value due to square root, set to none in these cases
-        try:
-            self.x_array_std = np.std(self.x_data, axis=0)
-        except TypeError as e:
-            logging.warning("array_std not possible due to sqrt")
-            self.x_array_std = None
-
-        if self.scale_type == "standardized" and self.x_array_std is None:
-            raise ValueError(
-                f"Cannot use scale_type 'standardize' because standard deviation is of None type"
-            )
+        self.x_array_std = np.std(self.x_data, axis=0)
 
     def scale(self, x_data: np.ndarray):
         """
