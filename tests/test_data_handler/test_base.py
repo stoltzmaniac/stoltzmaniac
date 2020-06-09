@@ -5,7 +5,6 @@ from stoltzmaniac.data_handler.base import ArrayData
 
 def test_array_data_input_types(DATA_ARRAY_3D):
 
-
     # Test data which cannot be converted to np.ndarray using dtype=np.float
     with pytest.raises(ValueError):
         ArrayData({"a": 1, "b": 3})
@@ -31,5 +30,3 @@ def test_array_data_description(DATA_ARRAY_3D):
     )
 
     assert print(exp) == print(array_data)
-
-

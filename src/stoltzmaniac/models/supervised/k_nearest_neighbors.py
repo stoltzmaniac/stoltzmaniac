@@ -9,8 +9,14 @@ from stoltzmaniac.utils.distance_functions import euclidian_distance
 
 
 class KNearestNeighbors:
-    def __init__(self, input_data, n_neighbors: int = 5,
-                 train_split=0.7, scale_type=None, seed=123):
+    def __init__(
+        self,
+        input_data,
+        n_neighbors: int = 5,
+        train_split=0.7,
+        scale_type=None,
+        seed=123,
+    ):
         """
         Create a KNN model
         Parameters
@@ -47,24 +53,22 @@ class KNearestNeighbors:
 
     @staticmethod
     def calculate_distance(a, b, distance_type):
-        if distance_type == 'euclidean':
+        if distance_type == "euclidean":
             return euclidian_distance(a, b)
         else:
-            raise ValueError(f'distance is not recognized, currently {distance_type}')
+            raise ValueError(f"distance is not recognized, currently {distance_type}")
 
-    def predict(self, new_data: np.ndarray, distance_type: str = 'euclidean'):
+    def predict(self, new_data: np.ndarray, distance_type: str = "euclidean"):
         all_distances = []
         for new_row in new_data:
             distances = []
             for comp_row, group in zip(self.scaler.x_data, self.scaler.y_data):
                 distance = self.calculate_distance(comp_row, new_row, distance_type)
                 distances.append([distance, group])
-            votes = [i[1] for i in sorted(distances)[:self.n_neighbors]]
+            votes = [i[1] for i in sorted(distances)[: self.n_neighbors]]
             popular_vote = Counter(votes).most_common(1)[0][0]
             all_distances.append(popular_vote)
         return all_distances
-
-
 
 
 # my_array = np.array([[1., 12., 2., 10], [2., 3., 4., 12], [3., 9., 6., 14], [4., 1., 8., 16]])
