@@ -18,7 +18,7 @@ class KNearestNeighbors:
         seed=123,
     ):
         """
-        Create a KNN model
+        Create a KNN model with scale type and k neighbors
         Parameters
         ----------
         input_data: can be of any type easily converted to np.ndarray
