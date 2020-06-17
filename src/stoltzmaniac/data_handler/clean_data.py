@@ -1,6 +1,6 @@
 import numpy as np
 
-from stoltzmaniac.data_handler.base import ArrayData
+from stoltzmaniac.data_handler.base import BaseData
 
 
 class CleanData:
@@ -13,10 +13,10 @@ class CleanData:
         input_data: np.ndarray to clean and encode
         """
         self.raw_data = input_data
-        # self.na_array = np.isnan(self.raw_data)
-        # self.inf_array = np.isinf(self.raw_data)
+        # self.na_array = np.isnan(self.data)
+        # self.inf_array = np.isinf(self.data)
         self.clean()
 
     def clean(self):
         # TODO: Create a cleaning function
-        self.clean_data = ArrayData(self.raw_data).raw_data
+        self.clean_data = BaseData(self.raw_data).data

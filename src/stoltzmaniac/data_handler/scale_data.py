@@ -7,7 +7,7 @@ import numpy as np
 
 
 class ScaleData:
-    def __init__(self, input_data: np.ndarray, scale_type: Union[str, None]):
+    def __init__(self, input_data: np.ndarray, scale_type: str):
         """
         Scales data, may use ONE scale_type: 'normalize', 'standardize', 'min_max', 'scale'
         Parameters

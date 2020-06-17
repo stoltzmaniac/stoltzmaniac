@@ -1,6 +1,6 @@
 import numpy as np
 
-from stoltzmaniac.data_handler.base import ArrayData
+from stoltzmaniac.data_handler.base import BaseData
 
 
 class TrainTestSplitData:
@@ -59,7 +59,9 @@ class TrainTestSplitData:
                 f"len(train_idx) = {len(train_idx)}\n"
                 f"len(test_idx) = {len(test_idx)}"
             )
-
-        # Set select data and use ArrayData type to ensure adherence to standards
-        self.train_data = ArrayData(self.raw_data[train_idx, :]).raw_data
-        self.test_data = ArrayData(self.raw_data[test_idx, :]).raw_data
+        print(self.raw_data)
+        print(train_idx)
+        print(test_idx)
+        # Set select data and use BaseData type to ensure adherence to standards
+        self.train_data = BaseData(self.raw_data[train_idx, :]).data
+        self.test_data = BaseData(self.raw_data[test_idx, :]).data

@@ -1,13 +1,12 @@
 import numpy as np
 
-from stoltzmaniac.data_handler.base import ArrayData
-from stoltzmaniac.data_handler.clean_data import CleanData
+from stoltzmaniac.data_handler.base import BaseData, RegressionData
 from stoltzmaniac.data_handler.scale_data import ScaleData
 from stoltzmaniac.data_handler.test_train_split_data import TrainTestSplitData
 
 
 class LinearRegression:
-    def __init__(self, input_data, train_split=0.7, scale_type=None, seed=123):
+    def __init__(self, X: np.ndarray, y: np.ndarray, train_split=0.7, scale_type=None, seed=123):
         """
         Create and train model for linear regression, single or multivariate
         Parameters
@@ -17,25 +16,21 @@ class LinearRegression:
         scale_type: str described in ScaleData model
         seed: flat described in TrainTestSplitData model
         """
-        self.raw_data = input_data
-        self.seed = seed
-        self.train_split = train_split
+
         self.scale_type = scale_type
+        self.raw_data = RegressionData(X, y)
+        self.X = self.raw_data.X
+        self.Y = self.raw_data.y
 
-        # Set data to ArrayData type in order to ensure it passes requirements
-        self.array_data = ArrayData(self.raw_data).raw_data
-        self.clean_data = CleanData(self.array_data).clean_data
-
-        # Split data for test / train
-        self.split_data = TrainTestSplitData(
-            input_data=self.clean_data, train_split=self.train_split, seed=self.seed
-        )
+        X_split = TrainTestSplitData(X, train_split=train_split, seed=seed)
+        y_split = TrainTestSplitData(y, train_split=train_split, seed=seed)
+        self.X_train = X_split.train_data
+        self.X_test = X_split.test_data
+        self.y_train = y_split.train_data
+        self.y_test = y_split.test_data
 
         # Set scaling parameters
-        self.scaler = ScaleData(self.split_data.train_data, self.scale_type)
-
-        # Scale TRAIN data only
-        self.split_data.train_data = self.scaler.scale(self.scaler.x_data)
+        self.scaler = ScaleData(self.X_train, scale_type=self.scale_type)
 
         # Fit linear regression model
         self.fit()
@@ -51,9 +46,9 @@ class LinearRegression:
         -------
         np.ndarray
         """
-        array_data = ArrayData(data).raw_data
+        array_data = BaseData(data).data
         scaled_data = self.scaler.scale(array_data)
-        return ArrayData(scaled_data).raw_data
+        return BaseData(scaled_data).data
 
     def fit(self):
         """

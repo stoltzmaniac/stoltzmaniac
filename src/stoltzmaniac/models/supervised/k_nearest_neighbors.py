@@ -1,7 +1,7 @@
 from collections import Counter
 import numpy as np
 
-from stoltzmaniac.data_handler.base import ArrayData
+from stoltzmaniac.data_handler.base import BaseData
 from stoltzmaniac.data_handler.clean_data import CleanData
 from stoltzmaniac.data_handler.scale_data import ScaleData
 from stoltzmaniac.data_handler.test_train_split_data import TrainTestSplitData
@@ -33,8 +33,8 @@ class KNearestNeighbors:
         self.train_split = train_split
         self.scale_type = scale_type
 
-        # Set data to ArrayData type in order to ensure it passes requirements
-        self.array_data = ArrayData(self.raw_data).raw_data
+        # Set data to BaseData type in order to ensure it passes requirements
+        self.array_data = BaseData(self.raw_data).data
         self.clean_data = CleanData(self.array_data).clean_data
 
         # Split data for test / train
