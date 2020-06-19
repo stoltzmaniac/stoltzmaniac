@@ -1,8 +1,7 @@
 from collections import Counter
 import numpy as np
 
-from stoltzmaniac.data_handler.base import ArrayData
-from stoltzmaniac.data_handler.clean_data import CleanData
+from stoltzmaniac.data_handler.base import BaseData, ClassificationData
 from stoltzmaniac.data_handler.scale_data import ScaleData
 from stoltzmaniac.data_handler.test_train_split_data import TrainTestSplitData
 from stoltzmaniac.utils.distance_functions import euclidian_distance
@@ -11,7 +10,8 @@ from stoltzmaniac.utils.distance_functions import euclidian_distance
 class KNearestNeighbors:
     def __init__(
         self,
-        input_data,
+        X: np.ndarray,
+        y: np.ndarray,
         n_neighbors: int = 5,
         train_split=0.7,
         scale_type=None,
@@ -21,70 +21,57 @@ class KNearestNeighbors:
         Create a KNN model with scale type and k neighbors
         Parameters
         ----------
-        input_data: can be of any type easily converted to np.ndarray
+        X: array of predictor variables
+        y: array of target variable
         n_neighbors: utilize n closest number of neighbors
         train_split: float described in TrainTestSplitData model
         scale_type: str described in ScaleData model
         seed: flat described in TrainTestSplitData model
         """
-        self.raw_data = input_data
         self.n_neighbors = n_neighbors
-        self.seed = seed
-        self.train_split = train_split
         self.scale_type = scale_type
 
-        # Set data to ArrayData type in order to ensure it passes requirements
-        self.array_data = ArrayData(self.raw_data).raw_data
-        self.clean_data = CleanData(self.array_data).clean_data
+        self.data = ClassificationData(X=X, y=y)
+        self.X = self.data.X
+        self.Y = self.data.y
 
-        # Split data for test / train
-        self.split_data = TrainTestSplitData(
-            input_data=self.clean_data, train_split=self.train_split, seed=self.seed
-        )
+        X_split = TrainTestSplitData(X, train_split=train_split, seed=seed)
+        y_split = TrainTestSplitData(y, train_split=train_split, seed=seed)
+        self.X_train = X_split.train_data
+        self.X_test = X_split.test_data
+        self.y_train = y_split.train_data
+        self.y_test = y_split.test_data
 
-        # Set scaling parameters
-        self.scaler = ScaleData(self.split_data.train_data, self.scale_type)
-
-        # Scale TRAIN data only
-        self.split_data.train_data = self.scaler.scale(self.scaler.x_data)
+        # Set scaling parameters, assigns fixed scaling parameters
+        self.scaler = ScaleData(self.X_train, scale_type=self.scale_type)
 
         # Get number of classes in train data
-        self.n_classes = len(np.unique(self.scaler.y_data))
+        self.n_classes = len(np.unique(self.y_train))
 
     @staticmethod
     def calculate_distance(a, b, distance_type):
         if distance_type == "euclidean":
             return euclidian_distance(a, b)
         else:
-            raise ValueError(f"distance is not recognized, currently {distance_type}")
+            raise ValueError(
+                f"distance_type is not recognized, currently {distance_type}"
+            )
 
-    def predict(self, new_data: np.ndarray, distance_type: str = "euclidean"):
+    def predict(self, data: np.ndarray, distance_type: str = "euclidean"):
+
+        new_data = self.scaler.scale(BaseData(data).data)
+        if new_data.shape[1] != self.X.shape[1]:
+            raise ValueError(
+                f"predict data must be the same number of columns as the original X data. # of Columns: Original X = {self.X.shape[1]}, current data = {new_data.shape[1]}"
+            )
+
         all_distances = []
         for new_row in new_data:
             distances = []
-            for comp_row, group in zip(self.scaler.x_data, self.scaler.y_data):
+            for comp_row, group in zip(self.scaler.original_scaled_data, self.y_train):
                 distance = self.calculate_distance(comp_row, new_row, distance_type)
-                distances.append([distance, group])
+                distances.append([distance, int(group)])
             votes = [i[1] for i in sorted(distances)[: self.n_neighbors]]
             popular_vote = Counter(votes).most_common(1)[0][0]
             all_distances.append(popular_vote)
         return all_distances
-
-
-# my_array = np.array(
-#     [
-#         [1.0, 12.0, 2.0, 10],
-#         [2.0, 3.0, 4.0, 12],
-#         [3.0, 9.0, 6.0, 14],
-#         [4.0, 1.0, 8.0, 16],
-#     ]
-# )
-# knn = KNearestNeighbors(my_array)
-# data_to_predict = np.array([[1., 12., 2], [2.1, 3.1, 4.1]])
-# data_to_predict = np.array([[1., 12., 2.], [2., 3., 4.], [3., 9., 6.], [4., 1., 8.]])
-# a = knn.predict(data_to_predict)
-# print(knn.scaler.x_data)
-# print(knn.scaler.y_data)
-# print(a)
-# knn.score(data_to_predict, 'euclidean', 'uniform')
-# data_to_predict = np.array([[1., 13.], [2., 4.], [3., 10.], [4., 2.]])
