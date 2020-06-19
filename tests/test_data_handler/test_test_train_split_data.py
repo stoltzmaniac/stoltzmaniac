@@ -31,6 +31,7 @@ def test_test_train_data_input_types(DATA_ARRAY_3D):
     assert (ttsd.data == DATA_ARRAY_3D).all()
     assert ttsd.seed == 1
 
+
 def test_test_train_data_split_function(DATA_ARRAY_3D):
     ttsd = TrainTestSplitData(DATA_ARRAY_3D, train_split=0.5, seed=1)
 

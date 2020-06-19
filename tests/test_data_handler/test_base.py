@@ -1,6 +1,12 @@
 import pytest
 import numpy as np
-from stoltzmaniac.data_handler.base import BaseData, UnsupervisedData, SupervisedData, RegressionData, ClassificationData
+from stoltzmaniac.data_handler.base import (
+    BaseData,
+    UnsupervisedData,
+    SupervisedData,
+    RegressionData,
+    ClassificationData,
+)
 
 
 def test_base_data_input_types(DATA_ARRAY_3D):
@@ -17,7 +23,7 @@ def test_base_data_input_types(DATA_ARRAY_3D):
         BaseData([1, 2, 4])
 
     with pytest.raises(ValueError):
-        BaseData(np.array([['a'], ['b']]))
+        BaseData(np.array([["a"], ["b"]]))
 
     array_data = BaseData(DATA_ARRAY_3D)
     assert (array_data.data == DATA_ARRAY_3D).all()
@@ -38,6 +44,7 @@ def test_base_data_description(DATA_ARRAY_3D):
 
     assert print(exp) == print(array_data)
 
+
 def test_unsupervised_data(DATA_ARRAY_3D, DATA_ARRAY_2D):
     """
     Ensuring data comes back as proper array
@@ -48,11 +55,14 @@ def test_unsupervised_data(DATA_ARRAY_3D, DATA_ARRAY_2D):
     comparison = DATA_ARRAY_2D == UnsupervisedData(DATA_ARRAY_2D).X
     assert comparison.all()
 
-    comparison = np.array([[1], [2], [3]]) == UnsupervisedData(np.array([[1], [2], [3]])).X
+    comparison = (
+        np.array([[1], [2], [3]]) == UnsupervisedData(np.array([[1], [2], [3]])).X
+    )
     assert comparison.all()
 
     comparison = np.array([[1], [2], [3]]) == UnsupervisedData(np.array([1, 2, 3])).X
     assert comparison.all()
+
 
 def test_supervised_data(DATA_ARRAY_3D, DATA_ARRAY_2D):
     """
@@ -88,14 +98,15 @@ def test_supervised_data(DATA_ARRAY_3D, DATA_ARRAY_2D):
     with pytest.raises(AttributeError):
         SupervisedData(x_2d, np.array([[1], [2]]))
 
+
 def test_regression_data(DATA_ARRAY_3D, DATA_ARRAY_2D):
     """
     Ensuring data comes back as proper array and test value errors
     """
-    x_1d = np.array([[1.], [2.], [3.]])
-    x_2d = np.array([[1., 1.], [2., 2.], [3., 3.]])
-    y_1d = np.array([[1.], [2.], [3.]])
-    y_1d_single = np.array([1., 2., 3.])
+    x_1d = np.array([[1.0], [2.0], [3.0]])
+    x_2d = np.array([[1.0, 1.0], [2.0, 2.0], [3.0, 3.0]])
+    y_1d = np.array([[1.0], [2.0], [3.0]])
+    y_1d_single = np.array([1.0, 2.0, 3.0])
     y_1d_int = np.array([[1], [2], [3]])
 
     sd = RegressionData(x_1d, y_1d)
@@ -130,9 +141,9 @@ def test_classification_data(DATA_ARRAY_3D, DATA_ARRAY_2D):
     """
     Ensuring data comes back as proper array and test value errors
     """
-    x_1d = np.array([[1.], [2.], [3.]])
-    x_2d = np.array([[1., 1.], [2., 2.], [3., 3.]])
-    y_1d = np.array([[1.], [2.], [3.]])
+    x_1d = np.array([[1.0], [2.0], [3.0]])
+    x_2d = np.array([[1.0, 1.0], [2.0, 2.0], [3.0, 3.0]])
+    y_1d = np.array([[1.0], [2.0], [3.0]])
     y_1d_single = np.array([1, 2, 3])
     y_1d_int = np.array([[1], [2], [3]])
 

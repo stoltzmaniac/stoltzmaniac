@@ -5,7 +5,9 @@ from stoltzmaniac.utils.distance_functions import euclidian_distance
 from stoltzmaniac.models.supervised.k_nearest_neighbors import KNearestNeighbors
 
 
-def test_knn_euclidean_calculate_distance(DATA_ARRAY_X, DATA_ARRAY_CLASSIFICATION_y, DATA_ARRAY_REGRESSION_y):
+def test_knn_euclidean_calculate_distance(
+    DATA_ARRAY_X, DATA_ARRAY_CLASSIFICATION_y, DATA_ARRAY_REGRESSION_y
+):
     a = np.array([[1.0, 2.0, 2.0, 3.0]])
     b = np.array([[2.0, 5.0, 4.0, 1.0]])
     c = euclidian_distance(a, b)
@@ -27,7 +29,6 @@ def test_knn_euclidean_calculate_distance(DATA_ARRAY_X, DATA_ARRAY_CLASSIFICATIO
 
     with pytest.raises(ValueError):
         KNearestNeighbors(DATA_ARRAY_X, DATA_ARRAY_REGRESSION_y)
-
 
 
 def test_knn_with_2_arrays(DATA_ARRAY_3D):
@@ -53,18 +54,12 @@ def test_knn_with_2_arrays(DATA_ARRAY_3D):
 
     my_array_y = np.array([1, 8, 16, 1, 8, 16, 1, 8, 16, 1, 8, 16, 1, 8, 16])
 
-    data_to_predict = np.array(
-        [
-            [1.0, 12.0, 2.0],
-            [2.0, 3.0, 4.0],
-            [3.0, 9.0, 6.0],
-        ]
-    )
+    data_to_predict = np.array([[1.0, 12.0, 2.0], [2.0, 3.0, 4.0], [3.0, 9.0, 6.0],])
 
     knn = KNearestNeighbors(my_array_x, my_array_y)
     comparison = np.array([1, 8, 16]) == knn.predict(data_to_predict)
     assert comparison.all()
 
-    knn = KNearestNeighbors(my_array_x, my_array_y, scale_type='normalize')
+    knn = KNearestNeighbors(my_array_x, my_array_y, scale_type="normalize")
     comparison = np.array([1, 8, 16]) == knn.predict(data_to_predict)
     assert comparison.all()

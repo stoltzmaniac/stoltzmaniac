@@ -54,13 +54,9 @@ class ScaleData:
 
         # Start scaling process based off of self.scale_type
         if self.scale_type == "min_max":
-            scaled_data = (data - self.array_min) / (
-                self.array_max - self.array_mean
-            )
+            scaled_data = (data - self.array_min) / (self.array_max - self.array_mean)
         elif self.scale_type == "normalize":
-            scaled_data = (data - self.array_mean) / (
-                self.array_max - self.array_min
-            )
+            scaled_data = (data - self.array_mean) / (self.array_max - self.array_min)
         elif self.scale_type == "scale":
             scaled_data = data - self.array_mean
         elif self.scale_type == "standardize":

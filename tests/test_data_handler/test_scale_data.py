@@ -23,7 +23,7 @@ def test_scale_data_results(DATA_ARRAY_2D):
         sd = ScaleData(DATA_ARRAY_2D, scale_type=i)
         assert sd.scale_type == i
 
-    x_2d = np.array([[1., 1.], [2., 2.], [3., 3.]])
+    x_2d = np.array([[1.0, 1.0], [2.0, 2.0], [3.0, 3.0]])
     sd = ScaleData(x_2d, scale_type=None)
     comparison = sd.array_mean == np.mean(x_2d, axis=0)
     assert comparison.all()

@@ -18,14 +18,16 @@ def DATA_ARRAY_2D() -> np.ndarray:
 
 @pytest.fixture
 def DATA_ARRAY_X() -> np.ndarray:
-    my_array = np.array([[1., 9.], [2., 13.], [3., 26.], [4., 18.]], dtype=np.float)
+    my_array = np.array(
+        [[1.0, 9.0], [2.0, 13.0], [3.0, 26.0], [4.0, 18.0]], dtype=np.float
+    )
     yield my_array
     return print("DATA_ARRAY_2D fixture finished.")
 
 
 @pytest.fixture
 def DATA_ARRAY_REGRESSION_y() -> np.ndarray:
-    my_array = np.array([[2.], [4.], [6.], [8.]], dtype=np.float)
+    my_array = np.array([[2.0], [4.0], [6.0], [8.0]], dtype=np.float)
     yield my_array
     return print("DATA_ARRAY_REGRESSION_y fixture finished.")
 
