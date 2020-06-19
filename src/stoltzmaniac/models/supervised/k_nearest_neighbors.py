@@ -75,22 +75,3 @@ class KNearestNeighbors:
             popular_vote = Counter(votes).most_common(1)[0][0]
             all_distances.append(popular_vote)
         return all_distances
-
-
-# my_array = np.array(
-#     [
-#         [1.0, 12.0, 2.0, 10],
-#         [2.0, 3.0, 4.0, 12],
-#         [3.0, 9.0, 6.0, 14],
-#         [4.0, 1.0, 8.0, 16],
-#     ]
-# )
-# knn = KNearestNeighbors(my_array)
-# data_to_predict = np.array([[1., 12., 2], [2.1, 3.1, 4.1]])
-# data_to_predict = np.array([[1., 12., 2.], [2., 3., 4.], [3., 9., 6.], [4., 1., 8.]])
-# a = knn.predict(data_to_predict)
-# print(knn.scaler.x_data)
-# print(knn.scaler.y_data)
-# print(a)
-# knn.score(data_to_predict, 'euclidean', 'uniform')
-# data_to_predict = np.array([[1., 13.], [2., 4.], [3., 10.], [4., 2.]])
