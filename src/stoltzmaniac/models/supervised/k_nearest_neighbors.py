@@ -58,12 +58,19 @@ class KNearestNeighbors:
             )
 
     def predict(self, data: np.ndarray, distance_type: str = "euclidean"):
+
+        new_data = self.scaler.scale(BaseData(data).data)
+        if new_data.shape[1] != self.X.shape[1]:
+            raise ValueError(
+                f"predict data must be the same number of columns as the original X data. # of Columns: Original X = {self.X.shape[1]}, current data = {new_data.shape[1]}"
+            )
+
         all_distances = []
-        for new_row in data:
+        for new_row in new_data:
             distances = []
             for comp_row, group in zip(self.scaler.original_scaled_data, self.y_train):
                 distance = self.calculate_distance(comp_row, new_row, distance_type)
-                distances.append([distance, group])
+                distances.append([distance, int(group)])
             votes = [i[1] for i in sorted(distances)[: self.n_neighbors]]
             popular_vote = Counter(votes).most_common(1)[0][0]
             all_distances.append(popular_vote)
