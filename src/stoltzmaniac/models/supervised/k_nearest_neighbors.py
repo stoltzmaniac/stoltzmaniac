@@ -53,7 +53,9 @@ class KNearestNeighbors:
         if distance_type == "euclidean":
             return euclidian_distance(a, b)
         else:
-            raise ValueError(f"distance_type is not recognized, currently {distance_type}")
+            raise ValueError(
+                f"distance_type is not recognized, currently {distance_type}"
+            )
 
     def predict(self, data: np.ndarray, distance_type: str = "euclidean"):
         all_distances = []

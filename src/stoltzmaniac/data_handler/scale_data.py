@@ -3,6 +3,7 @@ import numpy as np
 
 # TODO: fix scaling types, calculations are not right
 
+
 class ScaleData:
     def __init__(self, data: np.ndarray, scale_type: str):
         """

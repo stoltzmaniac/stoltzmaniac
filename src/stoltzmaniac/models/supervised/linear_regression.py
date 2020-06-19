@@ -6,7 +6,9 @@ from stoltzmaniac.data_handler.test_train_split_data import TrainTestSplitData
 
 
 class LinearRegression:
-    def __init__(self, X: np.ndarray, y: np.ndarray, train_split=0.7, scale_type=None, seed=123):
+    def __init__(
+        self, X: np.ndarray, y: np.ndarray, train_split=0.7, scale_type=None, seed=123
+    ):
         """
         Create and train model for linear regression, single or multivariate
         Parameters

@@ -3,6 +3,7 @@ import numpy as np
 
 # TODO: add some kind of encoding for categorical data
 
+
 class BaseData:
     def __init__(self, input_data):
         """
@@ -23,7 +24,7 @@ class BaseData:
         if self.data.ndim == 1:
             self.data = self.data.reshape(-1, 1)
 
-        if self.data.dtype not in [np.dtype('int64'), np.dtype('float64')]:
+        if self.data.dtype not in [np.dtype("int64"), np.dtype("float64")]:
             raise ValueError(
                 f"input_data needs to be either np.float64 or np.int64, input_data is currently: {self.data.dtype}"
             )
@@ -72,7 +73,6 @@ class SupervisedData:
             )
 
 
-
 class RegressionData:
     def __init__(self, X: np.ndarray, y: np.ndarray):
         """
@@ -87,7 +87,7 @@ class RegressionData:
         self.y = supervised_data.y
 
         # Check to ensure `y` is for regression and not classification
-        if self.y.dtype != np.dtype('float64'):
+        if self.y.dtype != np.dtype("float64"):
             raise ValueError(
                 f"Target variable (y) must be of dtype float64, currently y is of dtype {self.y.dtype}"
             )
@@ -112,7 +112,7 @@ class ClassificationData:
             )
 
         # Check to ensure `y` is for regression and not classification
-        if self.y.dtype != np.dtype('int64'):
+        if self.y.dtype != np.dtype("int64"):
             raise ValueError(
                 f"Target variable (y) must be of dtype int64, currently y is of dtype {self.y.dtype}"
             )
