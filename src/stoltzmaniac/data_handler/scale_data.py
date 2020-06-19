@@ -22,10 +22,10 @@ class ScaleData:
             )
 
         # Set statistics to be used in preprocessing - needed during preprocessing for predictions
-        self.x_array_mean = np.mean(self.original_data, axis=0)
-        self.x_array_max = np.max(self.original_data, axis=0)
-        self.x_array_min = np.min(self.original_data, axis=0)
-        self.x_array_std = np.std(self.original_data, axis=0)
+        self.array_mean = np.mean(self.original_data, axis=0)
+        self.array_max = np.max(self.original_data, axis=0)
+        self.array_min = np.min(self.original_data, axis=0)
+        self.array_std = np.std(self.original_data, axis=0)
 
         self.original_scaled_data = self.scale(data=self.original_data)
 
@@ -39,7 +39,7 @@ class ScaleData:
 
         Returns
         -------
-        np.ndarray of scaled data or returns x_data if self.scale_type is None
+        np.ndarray of scaled data or returns data if self.scale_type is None
         """
         # Ensure that scale type is handled by function
         if (
@@ -54,17 +54,17 @@ class ScaleData:
 
         # Start scaling process based off of self.scale_type
         if self.scale_type == "min_max":
-            scaled_data = (data - self.x_array_min) / (
-                self.x_array_max - self.x_array_mean
+            scaled_data = (data - self.array_min) / (
+                self.array_max - self.array_mean
             )
         elif self.scale_type == "normalize":
-            scaled_data = (data - self.x_array_mean) / (
-                self.x_array_max - self.x_array_min
+            scaled_data = (data - self.array_mean) / (
+                self.array_max - self.array_min
             )
         elif self.scale_type == "scale":
-            scaled_data = data - self.x_array_mean
+            scaled_data = data - self.array_mean
         elif self.scale_type == "standardize":
-            scaled_data = (data - self.x_array_mean) / self.x_array_std
+            scaled_data = (data - self.array_mean) / self.array_std
         else:
             scaled_data = data
         return scaled_data

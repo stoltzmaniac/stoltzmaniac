@@ -6,15 +6,11 @@ from stoltzmaniac.data_handler.test_train_split_data import TrainTestSplitData
 
 def test_test_train_data_input_types(DATA_ARRAY_3D):
 
-    # Test not entering all parameters
     with pytest.raises(TypeError):
-        TrainTestSplitData(DATA_ARRAY_3D)
+        TrainTestSplitData(DATA_ARRAY_3D, train_split=1)
 
     with pytest.raises(TypeError):
-        TrainTestSplitData(DATA_ARRAY_3D, train_split=0.7)
-
-    with pytest.raises(TypeError):
-        TrainTestSplitData(DATA_ARRAY_3D, seed=10)
+        TrainTestSplitData(DATA_ARRAY_3D, seed=1.0)
 
     # Test with bad seeds
     with pytest.raises(TypeError):
@@ -32,9 +28,8 @@ def test_test_train_data_input_types(DATA_ARRAY_3D):
 
     ttsd = TrainTestSplitData(DATA_ARRAY_3D, train_split=0.7, seed=1)
     assert ttsd.train_split == 0.7
-    assert (ttsd.raw_data == DATA_ARRAY_3D).all()
+    assert (ttsd.data == DATA_ARRAY_3D).all()
     assert ttsd.seed == 1
-
 
 def test_test_train_data_split_function(DATA_ARRAY_3D):
     ttsd = TrainTestSplitData(DATA_ARRAY_3D, train_split=0.5, seed=1)

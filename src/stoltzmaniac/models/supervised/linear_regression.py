@@ -23,7 +23,7 @@ class LinearRegression:
         self.scale_type = scale_type
         self.data = RegressionData(X, y)
         self.X = self.data.X
-        self.Y = self.data.y
+        self.y = self.data.y
 
         X_split = TrainTestSplitData(X, train_split=train_split, seed=seed)
         y_split = TrainTestSplitData(y, train_split=train_split, seed=seed)
