@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "stoltzmaniac"
-version = "0.1.5"
+version = "0.2.0"
 description = "A lightweight library for basic machine learning tasks."
 readme = "README.md"
 repository = "https://github.com/stoltzmaniac/stoltzmaniac"
