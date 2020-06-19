@@ -1,24 +1,19 @@
-from typing import Union
-import logging
-
 import numpy as np
+
 
 # TODO: fix scaling types, calculations are not right
 
-
 class ScaleData:
-    def __init__(self, input_data: np.ndarray, scale_type: str):
+    def __init__(self, data: np.ndarray, scale_type: str):
         """
         Scales data, may use ONE scale_type: 'normalize', 'standardize', 'min_max', 'scale'
         Parameters
         ----------
-        input_data
-        scale_type
+        data: should be train data only
+        scale_type: type of scaling desired for training data
         """
-        self.raw_data = input_data  # used to store raw values for user reference
+        self.original_data = data  # used to store raw values for user reference
         self.scale_type = scale_type
-        self.x_data = self.raw_data[:, :-1]
-        self.y_data = self.raw_data[:, -1]
 
         if not isinstance(self.scale_type, str) and self.scale_type is not None:
             raise TypeError(
@@ -26,18 +21,20 @@ class ScaleData:
             )
 
         # Set statistics to be used in preprocessing - needed during preprocessing for predictions
-        self.x_array_mean = np.mean(self.x_data, axis=0)
-        self.x_array_max = np.max(self.x_data, axis=0)
-        self.x_array_min = np.min(self.x_data, axis=0)
-        self.x_array_std = np.std(self.x_data, axis=0)
+        self.x_array_mean = np.mean(self.original_data, axis=0)
+        self.x_array_max = np.max(self.original_data, axis=0)
+        self.x_array_min = np.min(self.original_data, axis=0)
+        self.x_array_std = np.std(self.original_data, axis=0)
 
-    def scale(self, x_data: np.ndarray):
+        self.original_scaled_data = self.scale(data=self.original_data)
+
+    def scale(self, data: np.ndarray):
         """
         Scales data to be used in both training and prediction. Scale should handle for a number of cases
         This function must be run on ALL data being passed, even if scaling will be of None type
         Parameters
         ----------
-        x_data: np.ndarray of ONLY predictor values
+        data: np.ndarray of ONLY predictor values
 
         Returns
         -------
@@ -51,22 +48,22 @@ class ScaleData:
             raise ValueError(
                 f"scale_type {self.scale_type} not in ['normalize', 'standardize', 'min_max', 'scale']"
             )
-        if x_data.shape == (1, 0):
-            raise ValueError("x_data shape is None")
+        if data.shape == (1, 0):
+            raise ValueError("data shape is None")
 
-        # Star scaling process based off of self.scale_type
+        # Start scaling process based off of self.scale_type
         if self.scale_type == "min_max":
-            scaled_data = (x_data - self.x_array_min) / (
+            scaled_data = (data - self.x_array_min) / (
                 self.x_array_max - self.x_array_mean
             )
         elif self.scale_type == "normalize":
-            scaled_data = (x_data - self.x_array_mean) / (
+            scaled_data = (data - self.x_array_mean) / (
                 self.x_array_max - self.x_array_min
             )
         elif self.scale_type == "scale":
-            scaled_data = x_data - self.x_array_mean
+            scaled_data = data - self.x_array_mean
         elif self.scale_type == "standardize":
-            scaled_data = (x_data - self.x_array_mean) / self.x_array_std
+            scaled_data = (data - self.x_array_mean) / self.x_array_std
         else:
-            scaled_data = x_data
+            scaled_data = data
         return scaled_data

@@ -11,16 +11,17 @@ class LinearRegression:
         Create and train model for linear regression, single or multivariate
         Parameters
         ----------
-        input_data: can be of any type easily converted to np.ndarray
+        X: array of predictor variables
+        y: array of target variable
         train_split: float described in TrainTestSplitData model
         scale_type: str described in ScaleData model
         seed: flat described in TrainTestSplitData model
         """
 
         self.scale_type = scale_type
-        self.raw_data = RegressionData(X, y)
-        self.X = self.raw_data.X
-        self.Y = self.raw_data.y
+        self.data = RegressionData(X, y)
+        self.X = self.data.X
+        self.Y = self.data.y
 
         X_split = TrainTestSplitData(X, train_split=train_split, seed=seed)
         y_split = TrainTestSplitData(y, train_split=train_split, seed=seed)
@@ -29,13 +30,13 @@ class LinearRegression:
         self.y_train = y_split.train_data
         self.y_test = y_split.test_data
 
-        # Set scaling parameters
+        # Set scaling parameters, assigns fixed scaling parameters
         self.scaler = ScaleData(self.X_train, scale_type=self.scale_type)
 
         # Fit linear regression model
         self.fit()
 
-    def preprocess(self, data):
+    def preprocess(self, data: np.ndarray):
         """
         Preprocessing will clean and scale data that is to be used in
         Parameters
@@ -55,23 +56,29 @@ class LinearRegression:
         Fits the model with self.train_data and creates self.betas to represent coefficients
         Last self.beta represents the intercept coefficent
         """
-        x = self.split_data.train_data
-        y = self.scaler.y_data
+        X = self.preprocess(self.X_train)
+        y = self.y_train
         # Add ones for intercept
-        A = np.c_[x, np.ones(len(x))]
+        A = np.c_[X, np.ones(len(X))]
         self.betas = np.linalg.lstsq(A, y, rcond=None)[0]
 
-    def predict(self, input_data):
+    def predict(self, data: np.ndarray):
         """
         Predict results based off of predictor variables, must match data format from initial training data
         Parameters
         ----------
-        input_data
+        data: array for data to be predicted, will automatically scale
 
         Returns
         -------
         np.ndarray of response variable
         """
-        x_pre = self.preprocess(input_data)
+        new_data = BaseData(data).data
+        if new_data.shape[1] != self.X.shape[1]:
+            raise ValueError(
+                f"predict data must be the same number of columns as the original X data. # of Columns: Original X = {self.X.shape[1]}, current data = {new_data.shape[1]}"
+            )
+
+        x_pre = self.preprocess(data)
         x = np.c_[x_pre, np.ones(len(x_pre))]
         return x.dot(self.betas)

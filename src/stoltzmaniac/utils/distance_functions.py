@@ -15,7 +15,7 @@ def euclidian_distance(a: np.ndarray, b: np.ndarray) -> np.ndarray:
     """
     if not (isinstance(a, np.ndarray) or isinstance(b, np.ndarray)):
         raise TypeError(
-            f"Both input a & b must be of type np.ndarra, currently: a is {type(a)}, b is {type(b)}"
+            f"Both input a & b must be of type np.ndarray, currently: a is {type(a)}, b is {type(b)}"
         )
     return np.linalg.norm(a - b)
 
