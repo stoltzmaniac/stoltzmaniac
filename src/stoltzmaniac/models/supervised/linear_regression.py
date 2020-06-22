@@ -6,11 +6,17 @@ from stoltzmaniac.data_handler.test_train_split_data import TrainTestSplitData
 
 
 def add_intercept(data: np.ndarray):
+    """
+    Adds a column of np.ones if an intercept is desired
+    Parameters
+    ----------
+    data: array of X predictor variables
+    """
     return np.c_[data, np.ones(len(data))]
 
 class LinearRegression:
     def __init__(
-        self, X: np.ndarray, y: np.ndarray, train_split=0.7, scale_type=None, seed=123, add_intercept=True
+        self, X: np.ndarray, y: np.ndarray, train_split=0.7, scale_type=None, seed=123, intercept=True
     ):
         """
         Create and train model for linear regression, single or multivariate
@@ -21,10 +27,10 @@ class LinearRegression:
         train_split: float described in TrainTestSplitData model
         scale_type: str described in ScaleData model
         seed: flat described in TrainTestSplitData model
-        add_intercept: add an intercept term to the model
+        intercept: add an intercept term to the model
         """
 
-        self.add_intercept = add_intercept
+        self.add_intercept = intercept
         self.scale_type = scale_type
         self.data = RegressionData(X, y)
         self.X = self.data.X
