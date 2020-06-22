@@ -3,16 +3,8 @@ import numpy as np
 from stoltzmaniac.data_handler.base import BaseData, RegressionData
 from stoltzmaniac.data_handler.scale_data import ScaleData
 from stoltzmaniac.data_handler.test_train_split_data import TrainTestSplitData
+from stoltzmaniac.utils.base import add_intercept
 
-
-def add_intercept(data: np.ndarray):
-    """
-    Adds a column of np.ones if an intercept is desired
-    Parameters
-    ----------
-    data: array of X predictor variables
-    """
-    return np.c_[data, np.ones(len(data))]
 
 class LinearRegression:
     def __init__(
