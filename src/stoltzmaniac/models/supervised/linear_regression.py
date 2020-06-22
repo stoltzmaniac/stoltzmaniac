@@ -5,9 +5,12 @@ from stoltzmaniac.data_handler.scale_data import ScaleData
 from stoltzmaniac.data_handler.test_train_split_data import TrainTestSplitData
 
 
+def add_intercept(data: np.ndarray):
+    return np.c_[data, np.ones(len(data))]
+
 class LinearRegression:
     def __init__(
-        self, X: np.ndarray, y: np.ndarray, train_split=0.7, scale_type=None, seed=123
+        self, X: np.ndarray, y: np.ndarray, train_split=0.7, scale_type=None, seed=123, add_intercept=True
     ):
         """
         Create and train model for linear regression, single or multivariate
@@ -18,8 +21,10 @@ class LinearRegression:
         train_split: float described in TrainTestSplitData model
         scale_type: str described in ScaleData model
         seed: flat described in TrainTestSplitData model
+        add_intercept: add an intercept term to the model
         """
 
+        self.add_intercept = add_intercept
         self.scale_type = scale_type
         self.data = RegressionData(X, y)
         self.X = self.data.X
@@ -60,9 +65,11 @@ class LinearRegression:
         """
         X = self.preprocess(self.X_train)
         y = self.y_train
-        # Add ones for intercept
-        A = np.c_[X, np.ones(len(X))]
-        self.betas = np.linalg.lstsq(A, y, rcond=None)[0]
+
+        if self.add_intercept:
+            X = add_intercept(X)
+
+        self.betas = np.linalg.lstsq(X, y, rcond=None)[0]
 
     def predict(self, data: np.ndarray):
         """
@@ -81,6 +88,9 @@ class LinearRegression:
                 f"predict data must be the same number of columns as the original X data. # of Columns: Original X = {self.X.shape[1]}, current data = {new_data.shape[1]}"
             )
 
-        x_pre = self.preprocess(data)
-        x = np.c_[x_pre, np.ones(len(x_pre))]
-        return x.dot(self.betas)
+        X = self.preprocess(data)
+
+        if self.add_intercept:
+            X = add_intercept(X)
+
+        return X.dot(self.betas)
