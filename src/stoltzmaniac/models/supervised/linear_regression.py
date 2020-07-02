@@ -3,6 +3,7 @@ import numpy as np
 from stoltzmaniac.data_handler.base import BaseData, RegressionData
 from stoltzmaniac.data_handler.scale_data import ScaleData
 from stoltzmaniac.data_handler.test_train_split_data import TrainTestSplitData
+from stoltzmaniac.utils.accuracy_metrics import calculate_r_squared
 
 
 class LinearRegression:
@@ -84,3 +85,8 @@ class LinearRegression:
         x_pre = self.preprocess(data)
         x = np.c_[x_pre, np.ones(len(x_pre))]
         return x.dot(self.betas)
+
+    def metrics(self):
+        r_squared_train = calculate_r_squared(self.y_train, self.predict(self.X_train))
+        r_squared_test = calculate_r_squared(self.y_test, self.predict(self.X_test))
+        print(f"""R^2 Train = {r_squared_train}\nR^2 Test = {r_squared_test}""")
