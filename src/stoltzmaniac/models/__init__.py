@@ -1,0 +1,2 @@
+from .supervised.linear_regression import LinearRegression
+from .supervised.k_nearest_neighbors import KNearestNeighbors

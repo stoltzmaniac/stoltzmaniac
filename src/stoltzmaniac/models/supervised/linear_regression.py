@@ -86,7 +86,10 @@ class LinearRegression:
         x = np.c_[x_pre, np.ones(len(x_pre))]
         return x.dot(self.betas)
 
-    def metrics(self):
-        r_squared_train = calculate_r_squared(self.y_train, self.predict(self.X_train))
-        r_squared_test = calculate_r_squared(self.y_test, self.predict(self.X_test))
-        print(f"""R^2 Train = {r_squared_train}\nR^2 Test = {r_squared_test}""")
+    @property
+    def r_squared_train(self):
+        return calculate_r_squared(self.y_train, self.predict(self.X_train))
+
+    @property
+    def r_squared_test(self):
+        return calculate_r_squared(self.y_test, self.predict(self.X_test))
